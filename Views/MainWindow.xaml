@@ -1,0 +1,859 @@
+﻿<Window x:Class="AutoTool.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:AutoTool.ViewModels"
+        Title="PCHANGER PRO - QUẢN LÝ TẬP TRUNG"
+        Height="620"
+        Width="1050"
+        Background="#0B0F19"
+        FontFamily="Segoe UI"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:MainViewModel/>
+    </Window.DataContext>
+
+    <Grid Margin="10">
+        <TabControl Background="Transparent" BorderThickness="0" Foreground="White">
+
+            <TabItem Header="💻 DASHBOARD"
+                     Background="#121821"
+                     Foreground="#4FC3F7"
+                     FontSize="14"
+                     FontWeight="Bold"
+                     Padding="15,8">
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="160"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" Background="#121821" CornerRadius="8" Padding="10" Margin="0,0,0,10">
+                        <DockPanel>
+                            <StackPanel Orientation="Horizontal" DockPanel.Dock="Left">
+
+                                <StackPanel Margin="0,0,15,0">
+                                    <TextBlock Text="ADD KEY" Foreground="#90A4AE" FontSize="10" Margin="0,0,0,2"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBox Text="{Binding NewKey, UpdateSourceTrigger=PropertyChanged}"
+                                                 Width="150"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="6"/>
+
+                                        <Button Command="{Binding AddKeyCommand}"
+                                                Content="+"
+                                                Width="35"
+                                                Background="#4FC3F7"
+                                                Foreground="#000"
+                                                FontWeight="Bold"
+                                                BorderThickness="0"
+                                                Margin="5,0,0,0"
+                                                Cursor="Hand"/>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,15,0">
+                                    <TextBlock Text="RUN MODE" Foreground="#90A4AE" FontSize="10" Margin="0,0,0,2"/>
+                                    <ComboBox ItemsSource="{Binding RunModes}"
+                                              SelectedItem="{Binding SelectedRunMode}"
+                                              Width="160"
+                                              Background="#1E2633"
+                                              Foreground="Black"
+                                              BorderThickness="0"
+                                              Padding="6"/>
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                                <Button Command="{Binding StartAllCommand}"
+                                        Content="▶ CHẠY TUẦN TỰ"
+                                        Width="140"
+                                        Height="35"
+                                        Background="#00E676"
+                                        Foreground="#000"
+                                        FontWeight="Bold"
+                                        Margin="0,0,10,0"
+                                        BorderThickness="0"
+                                        Cursor="Hand"/>
+
+                                <Button Command="{Binding StopAllCommand}"
+                                        Content="⏹ DỪNG HẾT"
+                                        Width="90"
+                                        Height="35"
+                                        Background="#D50000"
+                                        Foreground="White"
+                                        FontWeight="Bold"
+                                        BorderThickness="0"
+                                        Cursor="Hand"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </Border>
+
+                    <Border Grid.Row="1" Background="#121821" CornerRadius="8" Padding="10">
+                        <DataGrid ItemsSource="{Binding Devices}"
+                                  AutoGenerateColumns="False"
+                                  CanUserAddRows="False"
+                                  Background="Transparent"
+                                  Foreground="White"
+                                  BorderThickness="0"
+                                  RowBackground="#1A222D"
+                                  AlternatingRowBackground="#1E2633"
+                                  GridLinesVisibility="Horizontal"
+                                  HorizontalGridLinesBrush="#2C384A">
+
+                            <DataGrid.Columns>
+                                <DataGridCheckBoxColumn Header="RUN" Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" Width="45"/>
+                                <DataGridTextColumn Header="KEY" Binding="{Binding Key}" Width="130" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="ADB ID" Binding="{Binding AdbId}" Width="130" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="STATE" Binding="{Binding Status}" Width="90" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="PROGRESS" Binding="{Binding StepInfo}" Width="*" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="LOOP" Binding="{Binding LoopCount}" Width="60" IsReadOnly="True"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Border>
+
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,10,0,10">
+                        <Button Command="{Binding ImportDataCommand}"
+                                Content="📥 IMPORT DỮ LIỆU"
+                                Background="#1E2633"
+                                Foreground="White"
+                                Padding="15,6"
+                                Margin="0,0,10,0"
+                                BorderThickness="0"
+                                Cursor="Hand"/>
+
+                        <Button Command="{Binding ExportDataCommand}"
+                                Content="📤 EXPORT DỮ LIỆU"
+                                Background="#1E2633"
+                                Foreground="White"
+                                Padding="15,6"
+                                BorderThickness="0"
+                                Cursor="Hand"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="3" Background="#000" CornerRadius="8" Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="📋 NHẬT KÝ HỆ THỐNG"
+                                       Foreground="#00E676"
+                                       FontWeight="Bold"
+                                       Margin="0,0,0,5"/>
+
+                            <ListBox Grid.Row="1"
+                                     ItemsSource="{Binding Logs}"
+                                     Background="#000"
+                                     BorderThickness="0"
+                                     Name="LogScrollList">
+
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Message}"
+                                                   Foreground="{Binding Color}"
+                                                   FontFamily="Consolas"
+                                                   FontSize="11"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="🌐 NETWORK"
+                     Background="#121821"
+                     Foreground="#4FC3F7"
+                     FontSize="14"
+                     FontWeight="Bold"
+                     Padding="15,8">
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+                    <StackPanel MaxWidth="600" HorizontalAlignment="Left">
+
+                        <Border Background="#121821" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="1. LOẠI MẠNG KẾT NỐI CHÍNH"
+                                           Foreground="#00E676"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,10"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,15">
+                                    <RadioButton Content="Sử dụng mạng Wi-Fi"
+                                                 Foreground="White"
+                                                 Margin="0,0,30,0"
+                                                 IsChecked="{Binding IsNetworkWifi}"/>
+
+                                    <RadioButton Content="Sử dụng mạng 4G (Máy trạm)"
+                                                 Foreground="White"
+                                                 IsChecked="{Binding IsNetwork4G}"/>
+                                </StackPanel>
+
+                                <Grid IsEnabled="{Binding IsNetworkWifi}" Margin="0,0,0,15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="TÊN WIFI (SSID):" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding TargetWifiSsid}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="MẬT KHẨU WIFI:" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding TargetWifiPassword}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid IsEnabled="{Binding IsNetwork4G}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="15"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="THỜI GIAN PHÁT WIFI (GIÂY):" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding WifiDuration}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="TÊN WIFI 4G (Nếu dùng đổi tên):" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding HotspotName}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#121821" CornerRadius="8" Padding="15">
+                            <StackPanel>
+                                <CheckBox Content="2. BẬT ĐỔI IP BẰNG PROXY (Dùng cho cả Wifi / 4G)"
+                                          Foreground="#00E676"
+                                          FontWeight="Bold"
+                                          Margin="0,0,0,10"
+                                          IsChecked="{Binding UseProxy}"/>
+
+                                <StackPanel IsEnabled="{Binding UseProxy}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,5,0,10">
+                                        <RadioButton Content="Sử dụng TMProxy"
+                                                     Foreground="White"
+                                                     Margin="0,0,30,0"
+                                                     IsChecked="{Binding UseTMProxy}"/>
+
+                                        <RadioButton Content="Sử dụng ProxyNo1"
+                                                     Foreground="White"
+                                                     IsChecked="{Binding UseProxyNo1}"/>
+                                    </StackPanel>
+
+                                    <TextBlock Text="API KEY (Proxy):" Foreground="#90A4AE" FontSize="10" Margin="0,0,0,2"/>
+                                    <TextBox Text="{Binding ProxyApiKey}"
+                                             Background="#1E2633"
+                                             Foreground="White"
+                                             BorderThickness="0"
+                                             Padding="8"
+                                             Margin="0,0,0,10"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Content="Bật cấu hình SocksDroid"
+                                                  Foreground="White"
+                                                  Margin="0,0,20,0"
+                                                  IsChecked="{Binding UseSocksDroid}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="⚙️ SCRIPTS"
+                     Background="#121821"
+                     Foreground="#4FC3F7"
+                     FontSize="14"
+                     FontWeight="Bold"
+                     Padding="15,8">
+
+                <Grid Margin="0,10,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" VerticalAlignment="Top">
+                        <Border Background="#121821" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="CHỌN KỊCH BẢN CHẠY"
+                                           Foreground="#00E676"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,15"/>
+
+                                <Grid Margin="0,0,0,15">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <CheckBox Grid.Row="0"
+                                              Grid.Column="0"
+                                              IsChecked="{Binding IsShopee}"
+                                              Content="Shopee Auto"
+                                              Foreground="White"
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,15,10"/>
+
+                                    <Button Grid.Row="0"
+                                            Grid.Column="1"
+                                            Command="{Binding TestShopeeCommand}"
+                                            Content="TEST AUTO"
+                                            Background="#F57C00"
+                                            Foreground="#000"
+                                            FontSize="10"
+                                            FontWeight="Bold"
+                                            Padding="8,4"
+                                            HorizontalAlignment="Left"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            Margin="0,0,0,10"/>
+
+                                    <CheckBox Grid.Row="1"
+                                              Grid.Column="0"
+                                              IsChecked="{Binding IsAddPhone}"
+                                              Content="Kèm SĐT"
+                                              Foreground="#4FC3F7"
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,15,10"/>
+
+                                    <Button Grid.Row="1"
+                                            Grid.Column="1"
+                                            Command="{Binding TestAddPhoneCommand}"
+                                            Content="TEST SĐT"
+                                            Background="#F57C00"
+                                            Foreground="#000"
+                                            FontSize="10"
+                                            FontWeight="Bold"
+                                            Padding="8,4"
+                                            HorizontalAlignment="Left"
+                                            BorderThickness="0"
+                                            Cursor="Hand"
+                                            Margin="0,0,0,10"/>
+
+                                    <TextBlock Grid.Row="2"
+                                               Grid.Column="0"
+                                               Text="Độc lập:"
+                                               Foreground="White"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,15,0"/>
+
+                                    <Button Grid.Row="2"
+                                            Grid.Column="1"
+                                            Command="{Binding TestGoogleCommand}"
+                                            Content="TEST GOOGLE"
+                                            Background="#F57C00"
+                                            Foreground="#000"
+                                            FontSize="10"
+                                            FontWeight="Bold"
+                                            Padding="8,4"
+                                            HorizontalAlignment="Left"
+                                            BorderThickness="0"
+                                            Cursor="Hand"/>
+                                </Grid>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                    <CheckBox IsChecked="{Binding IsTikTok}"
+                                              Content="TikTok"
+                                              Foreground="White"
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,20,0"/>
+
+                                    <CheckBox IsChecked="{Binding IsNuoiShopee}"
+                                              Content="Nuôi Shopee"
+                                              Foreground="White"
+                                              VerticalAlignment="Center"
+                                              Margin="0,0,20,0"/>
+
+                                    <CheckBox IsChecked="{Binding IsSerialAuto}"
+                                              Content="Serial Auto"
+                                              Foreground="White"
+                                              VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#121821" CornerRadius="8" Padding="15">
+                            <StackPanel>
+                                <TextBlock Text="THÔNG SỐ THIẾT BỊ &amp; DELAY"
+                                           Foreground="#00E676"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,10"/>
+
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock Text="BRAND THIẾT BỊ:" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding Brand}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="PREFIX BACKUP:" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding BackupPrefix}"
+                                                 Background="#1E2633"
+                                                 Foreground="#FF5252"
+                                                 FontWeight="Bold"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock Text="NGHỈ SAU VÒNG:" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding NghiSauVong}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="THỜI GIAN NGHỈ (PHÚT):" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding PhutNghi}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock Text="LAT/LON (Fake GPS):" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding LatLon}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="DELAY (GIÂY):" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding DelaySeconds}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel>
+                                        <TextBlock Text="DỪNG HẲN SAU (VÒNG) [Để 0 là chạy vĩnh viễn]:"
+                                                   Foreground="#FF5252"
+                                                   FontSize="10"
+                                                   FontWeight="Bold"/>
+
+                                        <TextBox Text="{Binding DungHanSauVong}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2" VerticalAlignment="Top">
+
+                        <Border Background="#121821" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="CẤU HÌNH API MAIL"
+                                           Foreground="#00E676"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,10"/>
+
+                                <StackPanel Margin="0,0,0,10">
+                                    <TextBlock Text="API KEY (Mail):" Foreground="#90A4AE" FontSize="10"/>
+                                    <TextBox Text="{Binding MailApiKey}"
+                                             Background="#1E2633"
+                                             Foreground="White"
+                                             BorderThickness="0"
+                                             Padding="8"
+                                             Margin="0,5,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel>
+                                    <TextBlock Text="PROD ID (Mail):" Foreground="#90A4AE" FontSize="10"/>
+                                    <TextBox Text="{Binding MailProductId}"
+                                             Background="#1E2633"
+                                             Foreground="White"
+                                             BorderThickness="0"
+                                             Padding="8"
+                                             Margin="0,5,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,12,0,0">
+                                    <CheckBox Content="Dùng mail test từ file TXT khi test Google"
+                                              IsChecked="{Binding UseTestMailFile}"
+                                              Foreground="#F57C00"
+                                              FontWeight="Bold"
+                                              Margin="0,0,0,8"/>
+
+                                    <TextBlock Text="FILE MAIL TEST (.TXT):"
+                                               Foreground="#90A4AE"
+                                               FontSize="10"/>
+
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox Text="{Binding TestMailFilePath, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 IsReadOnly="True"/>
+
+                                        <Button Grid.Column="1"
+                                                Content="..."
+                                                Width="30"
+                                                Background="#4FC3F7"
+                                                Foreground="#000"
+                                                FontWeight="Bold"
+                                                Margin="5,0,0,0"
+                                                Cursor="Hand"
+                                                Click="BtnBrowseTestMailFile_Click"/>
+                                    </Grid>
+
+                                    <TextBlock Text="Format: email|pass hoặc email|pass|recoveryEmail"
+                                               Foreground="#90A4AE"
+                                               FontSize="10"
+                                               Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#121821" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="CẤU HÌNH API THUÊ SIM"
+                                           Foreground="#00E676"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,10"/>
+
+                                <StackPanel Margin="0,0,0,10">
+                                    <TextBlock Text="CHỌN TỔNG ĐÀI SMS:" Foreground="#90A4AE" FontSize="10"/>
+                                    <ComboBox SelectedItem="{Binding SelectedSmsProvider}"
+                                              Background="#1E2633"
+                                              Foreground="Black"
+                                              BorderThickness="0"
+                                              Padding="6"
+                                              Margin="0,5,0,0">
+
+                                        <ComboBoxItem Content="Otis"/>
+                                        <ComboBoxItem Content="ViOtp"/>
+                                        <ComboBoxItem Content="BossOtp"/>
+                                        <ComboBoxItem Content="FunOtp"/>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,10">
+                                    <TextBlock Text="API KEY (Sim):" Foreground="#90A4AE" FontSize="10"/>
+                                    <TextBox Text="{Binding SmsApiKey}"
+                                             Background="#1E2633"
+                                             Foreground="White"
+                                             BorderThickness="0"
+                                             Padding="8"
+                                             Margin="0,5,0,0"/>
+                                </StackPanel>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="10"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="SERVICE ID (Sim):" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding SmsServiceId}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="MẠNG (Network):" Foreground="#90A4AE" FontSize="10"/>
+                                        <TextBox Text="{Binding SmsNetwork}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 Margin="0,5,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#121821" CornerRadius="8" Padding="15">
+                            <StackPanel>
+                                <TextBlock Text="API OPEN AI (Giải Captcha)"
+                                           Foreground="#00E676"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,10"/>
+
+                                <StackPanel>
+                                    <TextBlock Text="API KEY OPEN AI:" Foreground="#90A4AE" FontSize="10"/>
+                                    <TextBox Text="{Binding OpenAIApiKey}"
+                                             Background="#1E2633"
+                                             Foreground="White"
+                                             BorderThickness="0"
+                                             Padding="8"
+                                             Margin="0,5,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="📂 SETTINGS"
+                     Background="#121821"
+                     Foreground="#4FC3F7"
+                     FontSize="14"
+                     FontWeight="Bold"
+                     Padding="15,8">
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+                    <StackPanel MaxWidth="600" HorizontalAlignment="Left">
+
+                        <Border Background="#121821" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                            <StackPanel>
+                                <TextBlock Text="ĐƯỜNG DẪN HỆ THỐNG"
+                                           Foreground="#00E676"
+                                           FontWeight="Bold"
+                                           Margin="0,0,0,15"/>
+
+                                <StackPanel Margin="0,0,0,12">
+                                    <TextBlock Text="PCHANGER API URL:" Foreground="#90A4AE" FontSize="10"/>
+                                    <TextBox Text="{Binding BaseUrl}"
+                                             Background="#1E2633"
+                                             Foreground="White"
+                                             BorderThickness="0"
+                                             Padding="8"
+                                             Margin="0,5,0,0"/>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,12">
+                                    <TextBlock Text="FILE ADB.EXE PATH:" Foreground="#90A4AE" FontSize="10"/>
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox Text="{Binding AdbPath, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"/>
+
+                                        <Button Grid.Column="1"
+                                                Content="..."
+                                                Width="30"
+                                                Background="#4FC3F7"
+                                                Foreground="#000"
+                                                FontWeight="Bold"
+                                                Margin="5,0,0,0"
+                                                Cursor="Hand"
+                                                Click="BtnBrowseAdb_Click"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,12">
+                                    <TextBlock Text="THƯ MỤC CHỨA ẢNH:" Foreground="#90A4AE" FontSize="10"/>
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox Text="{Binding ImageFolderPath, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"/>
+
+                                        <Button Grid.Column="1"
+                                                Content="..."
+                                                Width="30"
+                                                Background="#4FC3F7"
+                                                Foreground="#000"
+                                                FontWeight="Bold"
+                                                Margin="5,0,0,0"
+                                                Cursor="Hand"
+                                                Click="BtnBrowseImageFolder_Click"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,12">
+                                    <TextBlock Text="FILE RESTORE (.TXT):" Foreground="#90A4AE" FontSize="10"/>
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox Text="{Binding RestoreFilePath, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 IsReadOnly="True"/>
+
+                                        <Button Grid.Column="1"
+                                                Content="..."
+                                                Width="30"
+                                                Background="#4FC3F7"
+                                                Foreground="#000"
+                                                FontWeight="Bold"
+                                                Margin="5,0,0,0"
+                                                Cursor="Hand"
+                                                Click="BtnBrowseRestore_Click"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <StackPanel Margin="0,0,0,12">
+                                    <TextBlock Text="FILE CẤU HÌNH OPENVPN (.OVPN):" Foreground="#90A4AE" FontSize="10"/>
+                                    <Grid Margin="0,5,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <TextBox Text="{Binding OpenVPNPath, UpdateSourceTrigger=PropertyChanged}"
+                                                 Background="#1E2633"
+                                                 Foreground="White"
+                                                 BorderThickness="0"
+                                                 Padding="8"
+                                                 IsReadOnly="True"/>
+
+                                        <Button Grid.Column="1"
+                                                Content="..."
+                                                Width="30"
+                                                Background="#4FC3F7"
+                                                Foreground="#000"
+                                                FontWeight="Bold"
+                                                Margin="5,0,0,0"
+                                                Cursor="Hand"/>
+                                    </Grid>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Background="#121821" CornerRadius="8" Padding="15">
+                            <StackPanel>
+                                <DockPanel Margin="0,0,0,10">
+                                    <TextBlock Text="📦 DANH SÁCH APK/XAPK CẦN CÀI"
+                                               Foreground="#00E676"
+                                               FontWeight="Bold"
+                                               VerticalAlignment="Center"/>
+
+                                    <Button x:Name="btnAddApkUI"
+                                            Content="THÊM FILE"
+                                            HorizontalAlignment="Right"
+                                            Background="#4FC3F7"
+                                            Foreground="#000"
+                                            FontWeight="Bold"
+                                            BorderThickness="0"
+                                            Padding="10,5"
+                                            Click="BtnAddApkUI_Click"
+                                            Cursor="Hand"/>
+                                </DockPanel>
+
+                                <ListBox ItemsSource="{Binding ApkFiles}"
+                                         Background="#1E2633"
+                                         Foreground="#00E676"
+                                         BorderThickness="0"
+                                         Height="120"
+                                         Padding="5"/>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+        </TabControl>
+    </Grid>
+</Window>

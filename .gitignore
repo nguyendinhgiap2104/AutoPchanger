@@ -1,0 +1,33 @@
+## Visual Studio / VS Code local state
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+## Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+## NuGet packages restored locally
+packages/
+*.nupkg
+
+## Signing keys and certificates
+*.pfx
+*.snk
+
+## Logs and temporary files
+*.log
+*.tmp
+*.cache
+TestResults/
+
+## OS files
+Thumbs.db
+Desktop.ini
