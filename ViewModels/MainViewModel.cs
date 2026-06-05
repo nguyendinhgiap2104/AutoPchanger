@@ -37,15 +37,27 @@ namespace AutoTool.ViewModels
             AppConfigManager.Save(_config);
         }
 
+        private void UpdateConfigValue<T>(Action<T> updateValue, T value, [CallerMemberName] string propertyName = null)
+        {
+            updateValue(value);
+            SaveConfig();
+            OnPropertyChanged(propertyName);
+        }
+
+        private bool SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(field, value))
+                return false;
+
+            field = value;
+            OnPropertyChanged(propertyName);
+            return true;
+        }
+
         public string BaseUrl
         {
             get => _config.BaseUrl;
-            set
-            {
-                _config.BaseUrl = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.BaseUrl = v, value);
         }
 
         public string AdbPath
@@ -53,231 +65,132 @@ namespace AutoTool.ViewModels
             get => _config.AdbPath;
             set
             {
-                _config.AdbPath = value;
+                UpdateConfigValue(v => _config.AdbPath = v, value);
                 _adbService.AdbPath = value;
-                SaveConfig();
-                OnPropertyChanged();
             }
         }
 
         public string ImageFolderPath
         {
             get => _config.ImageFolderPath;
-            set
-            {
-                _config.ImageFolderPath = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.ImageFolderPath = v, value);
         }
 
         public string RestoreFilePath
         {
             get => _config.RestoreFilePath;
-            set
-            {
-                _config.RestoreFilePath = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.RestoreFilePath = v, value);
         }
 
         public string OpenVPNPath
         {
             get => _config.OpenVPNPath;
-            set
-            {
-                _config.OpenVPNPath = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.OpenVPNPath = v, value);
         }
 
         public string Brand
         {
             get => _config.Brand;
-            set
-            {
-                _config.Brand = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.Brand = v, value);
         }
 
         public string BackupPrefix
         {
             get => _config.BackupPrefix;
-            set
-            {
-                _config.BackupPrefix = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.BackupPrefix = v, value);
         }
 
         public int NghiSauVong
         {
             get => _config.NghiSauVong;
-            set
-            {
-                _config.NghiSauVong = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.NghiSauVong = v, value);
         }
 
         public int PhutNghi
         {
             get => _config.PhutNghi;
-            set
-            {
-                _config.PhutNghi = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.PhutNghi = v, value);
         }
 
         public string LatLon
         {
             get => _config.LatLon;
-            set
-            {
-                _config.LatLon = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.LatLon = v, value);
         }
 
         public int DelaySeconds
         {
             get => _config.DelaySeconds;
-            set
-            {
-                _config.DelaySeconds = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.DelaySeconds = v, value);
         }
 
         private int _dungHanSauVong = 0;
         public int DungHanSauVong
         {
             get => _dungHanSauVong;
-            set
-            {
-                _dungHanSauVong = value;
-                OnPropertyChanged();
-            }
+            set => SetField(ref _dungHanSauVong, value);
         }
 
         public bool IsShopee
         {
             get => _config.IsShopee;
-            set
-            {
-                _config.IsShopee = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.IsShopee = v, value);
         }
 
         public bool IsAddPhone
         {
             get => _config.IsAddPhone;
-            set
-            {
-                _config.IsAddPhone = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.IsAddPhone = v, value);
         }
 
         public bool IsTikTok
         {
             get => _config.IsTikTok;
-            set
-            {
-                _config.IsTikTok = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.IsTikTok = v, value);
         }
 
         public bool IsNuoiShopee
         {
             get => _config.IsNuoiShopee;
-            set
-            {
-                _config.IsNuoiShopee = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.IsNuoiShopee = v, value);
         }
 
         public bool IsSerialAuto
         {
             get => _config.IsSerialAuto;
-            set
-            {
-                _config.IsSerialAuto = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.IsSerialAuto = v, value);
         }
 
         public string MailApiKey
         {
             get => _config.MailApiKey;
-            set
-            {
-                _config.MailApiKey = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.MailApiKey = v, value);
         }
 
         public string MailProductId
         {
             get => _config.MailProductId;
-            set
-            {
-                _config.MailProductId = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.MailProductId = v, value);
         }
 
         public string OpenAIApiKey
         {
             get => _config.OpenAIApiKey;
-            set
-            {
-                _config.OpenAIApiKey = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.OpenAIApiKey = v, value);
         }
 
         private bool _useTestMailFile = false;
         public bool UseTestMailFile
         {
             get => _useTestMailFile;
-            set
-            {
-                _useTestMailFile = value;
-                OnPropertyChanged();
-            }
+            set => SetField(ref _useTestMailFile, value);
         }
 
         private string _testMailFilePath = "";
         public string TestMailFilePath
         {
             get => _testMailFilePath;
-            set
-            {
-                _testMailFilePath = value;
-                OnPropertyChanged();
-            }
+            set => SetField(ref _testMailFilePath, value);
         }
 
         public string SelectedSmsProvider { get; set; } = "Otis";
@@ -310,121 +223,69 @@ namespace AutoTool.ViewModels
         public string TargetWifiSsid
         {
             get => _targetWifiSsid;
-            set
-            {
-                _targetWifiSsid = value;
-                OnPropertyChanged();
-            }
+            set => SetField(ref _targetWifiSsid, value);
         }
 
         private string _targetWifiPassword = "";
         public string TargetWifiPassword
         {
             get => _targetWifiPassword;
-            set
-            {
-                _targetWifiPassword = value;
-                OnPropertyChanged();
-            }
+            set => SetField(ref _targetWifiPassword, value);
         }
 
         private bool _useProxy = false;
         public bool UseProxy
         {
             get => _useProxy;
-            set
-            {
-                _useProxy = value;
-                OnPropertyChanged();
-            }
+            set => SetField(ref _useProxy, value);
         }
 
         public bool UseTMProxy
         {
             get => _config.UseTMProxy;
-            set
-            {
-                _config.UseTMProxy = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.UseTMProxy = v, value);
         }
 
         public bool UseProxyNo1
         {
             get => _config.UseProxyNo1;
-            set
-            {
-                _config.UseProxyNo1 = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.UseProxyNo1 = v, value);
         }
 
         public string ProxyApiKey
         {
             get => _config.ProxyApiKey;
-            set
-            {
-                _config.ProxyApiKey = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.ProxyApiKey = v, value);
         }
 
         public bool Use4GHotspot
         {
             get => _config.Use4GHotspot;
-            set
-            {
-                _config.Use4GHotspot = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.Use4GHotspot = v, value);
         }
 
         public int WifiDuration
         {
             get => _config.WifiDuration;
-            set
-            {
-                _config.WifiDuration = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.WifiDuration = v, value);
         }
 
         public string HotspotName
         {
             get => _config.HotspotName;
-            set
-            {
-                _config.HotspotName = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.HotspotName = v, value);
         }
 
         public bool UseSocksDroid
         {
             get => _config.UseSocksDroid;
-            set
-            {
-                _config.UseSocksDroid = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.UseSocksDroid = v, value);
         }
 
         public bool UseOpenVPN
         {
             get => _config.UseOpenVPN;
-            set
-            {
-                _config.UseOpenVPN = value;
-                SaveConfig();
-                OnPropertyChanged();
-            }
+            set => UpdateConfigValue(v => _config.UseOpenVPN = v, value);
         }
 
         public List<string> RunModes { get; set; } = new List<string> { "Backup", "Restore and Backup" };
@@ -436,11 +297,7 @@ namespace AutoTool.ViewModels
         public string NewKey
         {
             get => _newKey;
-            set
-            {
-                _newKey = value;
-                OnPropertyChanged();
-            }
+            set => SetField(ref _newKey, value);
         }
 
         public IAsyncCommand StartAllCommand { get; }
@@ -664,25 +521,7 @@ namespace AutoTool.ViewModels
             {
                 try
                 {
-                    if (!Use4GHotspot)
-                    {
-                        AddLog($"[{device.Key}] 🌐 [Test] Bật Wi-Fi...");
-                        KAutoHelper.ADBHelper.ExecuteCMD($"adb -s {device.AdbId} shell svc wifi enable");
-
-                        await Task.Delay(3000, CancellationToken.None);
-
-                        if (!string.IsNullOrWhiteSpace(TargetWifiSsid))
-                        {
-                            AddLog($"[{device.Key}] 🔄 Đang kết nối vào Wi-Fi: {TargetWifiSsid}...");
-
-                            string connectCmd =
-                                $"adb -s {device.AdbId} shell cmd wifi connect-network \"{TargetWifiSsid}\" wpa2 \"{TargetWifiPassword}\"";
-
-                            KAutoHelper.ADBHelper.ExecuteCMD(connectCmd);
-
-                            await Task.Delay(5000, CancellationToken.None);
-                        }
-                    }
+                    await EnableWifiForTestAsync(device, CancellationToken.None);
 
                     await _shopeeAuto.RunRegistrationScriptAsync(
                         device.AdbId,
@@ -775,25 +614,7 @@ namespace AutoTool.ViewModels
             {
                 try
                 {
-                    if (!Use4GHotspot)
-                    {
-                        AddLog($"[{device.Key}] 🌐 [Test] Bật Wi-Fi...");
-                        KAutoHelper.ADBHelper.ExecuteCMD($"adb -s {device.AdbId} shell svc wifi enable");
-
-                        await Task.Delay(3000, CancellationToken.None);
-
-                        if (!string.IsNullOrWhiteSpace(TargetWifiSsid))
-                        {
-                            AddLog($"[{device.Key}] 🔄 Đang kết nối vào Wi-Fi: {TargetWifiSsid}...");
-
-                            string connectCmd =
-                                $"adb -s {device.AdbId} shell cmd wifi connect-network \"{TargetWifiSsid}\" wpa2 \"{TargetWifiPassword}\"";
-
-                            KAutoHelper.ADBHelper.ExecuteCMD(connectCmd);
-
-                            await Task.Delay(5000, CancellationToken.None);
-                        }
-                    }
+                    await EnableWifiForTestAsync(device, CancellationToken.None);
 
                     _googleAuth.UseTestMailFile = UseTestMailFile;
                     _googleAuth.TestMailFilePath = TestMailFilePath;
@@ -810,6 +631,29 @@ namespace AutoTool.ViewModels
                     AddLog($"[{device.Key}] ❌ Lỗi Test Google: {ex.Message}", "#FF5252");
                 }
             });
+        }
+
+        private async Task EnableWifiForTestAsync(DeviceModel device, CancellationToken token)
+        {
+            if (Use4GHotspot)
+                return;
+
+            AddLog($"[{device.Key}] 🌐 [Test] Bật Wi-Fi...");
+            KAutoHelper.ADBHelper.ExecuteCMD($"adb -s {device.AdbId} shell svc wifi enable");
+
+            await Task.Delay(3000, token);
+
+            if (string.IsNullOrWhiteSpace(TargetWifiSsid))
+                return;
+
+            AddLog($"[{device.Key}] 🔄 Đang kết nối vào Wi-Fi: {TargetWifiSsid}...");
+
+            string connectCommand =
+                $"adb -s {device.AdbId} shell cmd wifi connect-network \"{TargetWifiSsid}\" wpa2 \"{TargetWifiPassword}\"";
+
+            KAutoHelper.ADBHelper.ExecuteCMD(connectCommand);
+
+            await Task.Delay(5000, token);
         }
 
         private async Task MasterSequentialLoopAsync(List<DeviceModel> activeDevices, CancellationToken token)
